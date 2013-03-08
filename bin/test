@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+
 # Esc[20h 	Set new line mode 	LMN
 # Esc[?1h 	Set cursor key to application 	DECCKM
 # none 	Set ANSI (versus VT52) 	DECANM
@@ -182,6 +183,15 @@
 #256 colors
 #Set the foreground color to index N:   \033[38;5;${N}m
 #Set the background color to index M:   \033[48;5;${M}m
+
+# Absolute path to the smithy gem prefix
+
+# Add the smithy lib dir to the ruby library search path
+$: << File.expand_path(File.dirname(File.realpath(__FILE__))+ '/../lib')
+
+require 'rubygems'
+require 'cls'
+require 'values'
 
 def output(string)
   STDOUT.write string.to_s
