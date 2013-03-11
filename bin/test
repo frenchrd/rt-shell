@@ -212,6 +212,27 @@ def screen_size
   [cols, rows]
 end
 
+def screen_size_using_escapes
+  system("stty raw -echo")
+  STDOUT.write "\e[18t"
+  response = c = ""
+  while c != 't'
+    c = STDIN.getbyte.chr #if STDIN.ready?
+    response += c.to_s unless c == "\e"
+  end
+  system "stty -raw echo"
+  if response =~ /\[8;(.*);(.*)t/
+    rows = $1
+    cols = $2
+    return [cols, rows]
+  end
+  return []
+end
+
+Signal.trap("INT") do # SIGINT = control-C
+  exit
+end
+
 clear_screen
 
 for r in 1..9
@@ -220,4 +241,25 @@ for r in 1..9
 end
 
 puts
-puts "[#{screen_size.join(', ')}]"
+puts "tput:    [#{screen_size.join(', ')}]"
+puts "escapes: [#{screen_size_using_escapes.join(', ')}]"
+
+# def char_if_pressed
+#   begin
+#     system("stty raw -echo") # turn raw input on
+#     c = nil
+#     if $stdin.ready?
+#       c = $stdin.getc
+#     end
+#     c.chr if c
+#   ensure
+#     system "stty -raw echo" # turn raw input off
+#   end
+# end
+
+# while true
+#   c = char_if_pressed
+#   puts "[#{c}]" if c
+#   sleep 1
+#   puts "tick"
+# end
