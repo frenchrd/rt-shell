@@ -202,22 +202,22 @@ def clear_screen
   output "\e[2J"
 end
 
-def set_cursor_position(row, column)
+def move_cursor(row, column)
   output "\e[#{row};#{column}H"
 end
 
-def get_screen_size
-  output "\e[18t"
+def screen_size
+  cols = `tput cols`.chomp
+  rows = `tput lines`.chomp
+  [cols, rows]
 end
 
 clear_screen
 
 for r in 1..9
-  set_cursor_position(r,r)
+  move_cursor(r,r)
   output r
 end
 
-get_screen_size
-
-sleep 10
-
+puts
+puts "[#{screen_size.join(', ')}]"
