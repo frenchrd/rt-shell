@@ -10,6 +10,7 @@ GEM
     debugger-linecache (1.1.2)
       debugger-ruby_core_source (>= 1.1.1)
     debugger-ruby_core_source (1.2.0)
+    highline (1.6.15)
     values (1.5.0)
 
 PLATFORMS
@@ -18,4 +19,5 @@ PLATFORMS
 DEPENDENCIES
   cls (~> 0.0.3)
   debugger
+  highline
   values (~> 1.5.0)

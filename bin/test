@@ -235,31 +235,32 @@ end
 
 clear_screen
 
-for r in 1..9
-  move_cursor(r,r)
-  output r
-end
+# for r in 1..9
+#   move_cursor(r,r)
+#   output r
+# end
+# puts
 
-puts
 puts "tput:    [#{screen_size.join(', ')}]"
 puts "escapes: [#{screen_size_using_escapes.join(', ')}]"
 
-# def char_if_pressed
-#   begin
-#     system("stty raw -echo") # turn raw input on
-#     c = nil
-#     if $stdin.ready?
-#       c = $stdin.getc
-#     end
-#     c.chr if c
-#   ensure
-#     system "stty -raw echo" # turn raw input off
-#   end
-# end
+require 'io/wait'
 
-# while true
-#   c = char_if_pressed
-#   puts "[#{c}]" if c
-#   sleep 1
-#   puts "tick"
-# end
+def char_if_pressed
+  begin
+    system("stty raw -echo") # turn raw input on
+    c = nil
+    c = $stdin.getc if $stdin.ready?
+    c.chr if c
+  ensure
+    system "stty -raw echo" # turn raw input off
+  end
+end
+
+while true
+  c = char_if_pressed
+  puts "[#{c}]" if c
+  # sleep 1
+  # puts "tick"
+end
+
