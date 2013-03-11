@@ -246,19 +246,27 @@ puts "escapes: [#{screen_size_using_escapes.join(', ')}]"
 
 require 'io/wait'
 
-def char_if_pressed
-  begin
-    system("stty raw -echo") # turn raw input on
-    c = nil
-    c = $stdin.getc if $stdin.ready?
-    c.chr if c
-  ensure
-    system "stty -raw echo" # turn raw input off
-  end
+def get_char
+  state = `stty -g`
+  `stty raw -echo -icanon isig`
+
+  STDIN.getc.chr
+ensure
+  `stty #{state}`
 end
+# def char_if_pressed
+#   begin
+#     system("stty raw -echo") # turn raw input on
+#     c = nil
+#     c = $stdin.getc if $stdin.ready?
+#     c.chr if c
+#   ensure
+#     system "stty -raw echo" # turn raw input off
+#   end
+# end
 
 while true
-  c = char_if_pressed
+  c = get_char
   puts "[#{c}]" if c
   # sleep 1
   # puts "tick"
