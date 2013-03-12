@@ -213,20 +213,22 @@ def screen_size
 end
 
 def screen_size_using_escapes
-  system("stty raw -echo")
+  state = `stty -g`
+  `stty raw -echo -icanon isig`
   STDOUT.write "\e[18t"
   response = c = ""
   while c != 't'
     c = STDIN.getbyte.chr #if STDIN.ready?
     response += c.to_s unless c == "\e"
   end
-  system "stty -raw echo"
   if response =~ /\[8;(.*);(.*)t/
     rows = $1
     cols = $2
     return [cols, rows]
   end
   return []
+ensure
+  `stty #{state}`
 end
 
 Signal.trap("INT") do # SIGINT = control-C
@@ -244,8 +246,6 @@ clear_screen
 puts "tput:    [#{screen_size.join(', ')}]"
 puts "escapes: [#{screen_size_using_escapes.join(', ')}]"
 
-require 'io/wait'
-
 def get_char
   state = `stty -g`
   `stty raw -echo -icanon isig`
@@ -254,6 +254,8 @@ def get_char
 ensure
   `stty #{state}`
 end
+
+# require 'io/wait'
 # def char_if_pressed
 #   begin
 #     system("stty raw -echo") # turn raw input on
