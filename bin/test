@@ -189,10 +189,14 @@
 # Add the smithy lib dir to the ruby library search path
 $: << File.expand_path(File.dirname(File.realpath(__FILE__))+ '/../lib')
 
-require 'rubygems'
-require 'cls'
-require 'values'
-require 'debugger'
+# require 'rubygems'
+# require 'cls'
+# require 'values'
+# require 'debugger'
+
+Signal.trap("INT") do
+  exit
+end
 
 def output(string)
   STDOUT.write string.to_s
@@ -231,25 +235,21 @@ ensure
   `stty #{state}`
 end
 
-Signal.trap("INT") do # SIGINT = control-C
-  exit
-end
-
 clear_screen
 
-# for r in 1..9
-#   move_cursor(r,r)
-#   output r
-# end
-# puts
+for r in 1..9
+  move_cursor(r,r)
+  output r
+end
+puts
 
+puts "Terminal Size:"
 puts "tput:    [#{screen_size.join(', ')}]"
-puts "escapes: [#{screen_size_using_escapes.join(', ')}]"
+# puts "escapes: [#{screen_size_using_escapes.join(', ')}]"
 
 def get_char
   state = `stty -g`
   `stty raw -echo -icanon isig`
-
   STDIN.getc.chr
 ensure
   `stty #{state}`
@@ -270,7 +270,6 @@ end
 while true
   c = get_char
   puts "[#{c}]" if c
-  # sleep 1
-  # puts "tick"
+  exit if c.downcase == 'q'
 end
 
