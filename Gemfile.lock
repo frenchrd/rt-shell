@@ -1,6 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    awesome_print (1.1.0)
     cls (0.0.3)
     columnize (0.3.6)
     debugger (1.4.0)
@@ -11,13 +12,18 @@ GEM
       debugger-ruby_core_source (>= 1.1.1)
     debugger-ruby_core_source (1.2.0)
     highline (1.6.15)
+    mime-types (1.21)
+    rest-client (1.6.7)
+      mime-types (>= 1.16)
     values (1.5.0)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
+  awesome_print
   cls (~> 0.0.3)
   debugger
   highline
+  rest-client
   values (~> 1.5.0)

@@ -184,13 +184,17 @@
 #Set the foreground color to index N:   \033[38;5;${N}m
 #Set the background color to index M:   \033[48;5;${M}m
 
+require 'rubygems'
+require 'cls'
+require 'values'
+require 'debugger'
+require 'readline'
+require 'rest-client'
+
 # Add the lib dir to the ruby library search path
 $: << File.expand_path(File.dirname(File.realpath(__FILE__))+ '/../lib')
-
-# require 'rubygems'
-# require 'cls'
-# require 'values'
-# require 'debugger'
+require 'request_tracker_base'
+require 'request_tracker_ticket'
 
 Signal.trap("INT") do
   exit
@@ -277,15 +281,22 @@ def clear_formatting
   "\e[m"
 end
 
-i = 0
-while true
-  c = get_char
-  puts "[#{c}]" if c
-  if c.downcase == 'j'
-    output foreground_color(i) + i.to_s + clear_formatting + background_color(i) + " " + i.to_s + " " + clear_formatting + " "
-    i += 1
-    i=0 if i > 255
-  end
-  exit if c.downcase == 'q'
-end
+# i = 0
+# while true
+#   c = get_char
+#   puts "[#{c}]" if c
+#   if c.downcase == 'j'
+#     output foreground_color(i) + i.to_s + clear_formatting + background_color(i) + " " + i.to_s + " " + clear_formatting + " "
+#     i += 1
+#     i=0 if i > 255
+#   end
+#   exit if c.downcase == 'q'
+# end
+
+username = Readline.readline("username: ")
+password = Readline.readline("password: ")
+
+RequestTrackerBase.login(username, password)
+
+puts RequestTrackerTicket.find(165505)
 
